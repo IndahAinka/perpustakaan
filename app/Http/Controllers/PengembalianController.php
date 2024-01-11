@@ -24,13 +24,26 @@ class PengembalianController extends Controller
      */
     public function create()
     {
+
         $data['info'] = 'Pengembalian';
         $data['page'] = 'Pengembalian-create';
 
         // $pinjam = new Peminjaman();
         // $data['pinjam'] = $pinjam->selectData()->toArray();
 
-        return view('contents.pengembalian.pengembalian_create',compact('data','pinjam'));
+        return view('contents.pengembalian.pengembalian_create',compact('data','peminjaman'));
+    }
+
+    public function create_pengembalian(Peminjaman $peminjaman)
+    {
+
+        $data['info'] = 'Pengembalian';
+        $data['page'] = 'Pengembalian-create';
+
+        // $pinjam = new Peminjaman();
+        // $data['pinjam'] = $pinjam->selectData()->toArray();
+
+        return view('contents.pengembalian.pengembalian_create',compact('data','peminjaman'));
     }
 
     /**
@@ -38,9 +51,16 @@ class PengembalianController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
-        // $request['is_late']= false;
-        // $request = Pengembalian::inputData($request);
+        $validateData = $request->except('_token');
+        $validateData = Pengembalian::inputData($validateData);
+        // dd($data);
+
+        $notification = array(
+            'message' => 'Buku Berhasil dikembalikan',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
     }
 
     /**

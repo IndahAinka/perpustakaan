@@ -54,7 +54,7 @@
                             <th>Nama</th>
                             <th>Buku</th>
                             <th>Tanggal</th>
-                            <th>Aksi</th>
+                            <th >Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,24 +65,21 @@
                                 <td>{{ $item->nama }}</td>
                                 <td>{{ $item->bukus_count }}</td>
                                 <td>{{ $item->created_at }}</td>
-                                <td class="text-right py-0 align-middle">
-                                    <div class="btn-group btn-group-sm">
+                                <td class="text-left py-0 align-middle ">
+                                    <div class="btn-group btn-group-sm ">
                                         <form action="{{ route('kategori.edit', $item['id']) }}" method="POST">
                                             @csrf
                                             @method('GET')
-                                            <button class="btn btn-info"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm mr-2 "><i class="fas fa-edit"></i></button>
                                         </form>
                                         <form action="{{ route('kategori.destroy', $item['id']) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger deleteBtn"onclick="return confirm('Apakah anda yakin untuk menghapus data ini?')"
+                                            <button type="submit" class="btn btn-secondary btn-sm mr-2 deleteBtn"onclick="return confirm('Apakah anda yakin untuk menghapus data ini?')"
                                                 value="{{ $item->id }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                            {{-- <button type="submit" class="btn btn-danger deleteBtn"
-                                                onclick="return confirm('Apakah anda yakin untuk menghapus data ini?')">
-                                                <i class="fas fa-trash"></i>
-                                            </button> --}}
+
                                         </form>
 
                                     </div>

@@ -11,14 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('penerbits', function (Blueprint $table) {
-            $table->id();
-            $table->string('kode')->unique();
-            $table->string('nama');
-            $table->string('alamat');
-            $table->string('telepon');
-            $table->timestamps();
-            
+        Schema::table('Peminjamen', function (Blueprint $table) {
+            $table->dateTime('tanggal_pengembalian')->nullable();
         });
     }
 
@@ -27,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('penerbits');
+        Schema::table('Peminjamen', function (Blueprint $table) {
+            //
+        });
     }
 };

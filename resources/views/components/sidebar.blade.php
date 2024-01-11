@@ -61,33 +61,6 @@
 
 
             <li class="nav-item">
-                <a class="nav-link" >
-                    <i class="nav-icon fas fa-clipboard"></i>
-                    <p>
-                        Pengembalian
-                        <i class="right fas fa-angle-left"></i>
-
-                        {{-- <span class="right badge badge-danger">New</span> --}}
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('pengembalian.index') }}">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Pengembalian Data</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('pengembalian.create') }}">
-                            <i class="far fa-circle nav-icon"></i>
-                            <p>Pengembalian Baru</p>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-
-            <li class="nav-item">
                 <a class="nav-link ">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>

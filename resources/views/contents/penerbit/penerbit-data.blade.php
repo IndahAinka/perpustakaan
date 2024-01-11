@@ -49,12 +49,12 @@
                                             <button class="btn btn-info"><i class="fas fa-edit"></i></button>
                                             {{-- <button type="button" class="btn btn-info"><i class="fas fa-edit"></button> --}}
                                         </form>
-                                        {{-- <form action="{{ route('kategori.destroy', $item['id']) }}" method="POST">
+                                        <form action="{{ route('kategori.destroy', $item['id']) }}" method="POST">
                                             @csrf
-                                            @method('DELETE') --}}
+                                            @method('DELETE')
                                             {{-- <a  class="btn btn-danger"><i class="fas fa-trash"></i></a> --}}
                                             <button type="submit" class="btn btn-danger"  onclick="return confirm('Apakah anda yakin untuk menghapus data ini?')"><i class="fas fa-trash"> </i></button>
-                                            {{-- </form> --}}
+                                            </form>
                                     </div>
                                 </td>
                             </tr>

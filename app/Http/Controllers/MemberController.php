@@ -37,8 +37,6 @@ class MemberController extends Controller
      */
     public function store(MemberStoreRequest $request): RedirectResponse
     {
-        // $validateData = $request->validate();
-        // $validateData = $request->safe()->only('kode');
 
         $validateData = $request->except('_token');
         $validateData['status'] = 'active';

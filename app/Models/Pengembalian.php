@@ -4,15 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pengembalian extends Model
 {
     use HasFactory;
 
-    public function bukus():HasOne
+    protected $guarded= ['id'];
+
+    public function Peminjamen():BelongsTo
     {
-        return $this->hasOne(Peminjaman::class);
+        return $this->belongsTo(Peminjaman::class);
     }
 
     public static function inputData($data)

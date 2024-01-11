@@ -20,7 +20,10 @@
                                         <label>Kategori</label>
                                         <select class="form-control select2" style="width: 100%;" name="kategori_id">
                                             @foreach ($data['kategori'] as $item)
-                                                <option selected="selected"  value="{{ $item['id'] }}">{{ $item['nama'] }}
+                                                {{-- <option selected="selected"  value="{{ $item['id'] }}">{{ $item['nama'] }}
+                                                </option> --}}
+                                                <option value="{{ $item['id'] }}" {{  $item['id'] == $item['id'] ? 'selected' : '' }}>
+                                                    {{ $item['nama'] }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -30,7 +33,10 @@
                                         <label>Penerbit</label>
                                         <select class="form-control select2" style="width: 100%;" name="penerbit_id">
                                             @foreach ($data['penerbit'] as $item)
-                                                <option selected="selected" value="{{ $item['id'] }}">{{ $item['nama'] }}
+                                                {{-- <option  value="{{ $item['id'] }}">{{ $item['nama'] }}
+                                                </option> --}}
+                                                <option value="{{ $item['id'] }}" {{  $item['id'] == $item['id'] ? 'selected' : '' }}>
+                                                    {{ $item['nama'] }}
                                                 </option>
                                             @endforeach
                                         </select>

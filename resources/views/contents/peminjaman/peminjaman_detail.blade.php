@@ -54,14 +54,14 @@
                                     <tbody>
                                         <tr>
                                             <td>{{ $peminjaman->id }}</td>
-                                            <td>{{ $peminjaman->buku_id }}</td>
-                                            <td>{{ $peminjaman->created_at }}</td>
+                                            <td>{{ $peminjaman->bukus->judul }}</td>
+                                            <td>{{ $peminjaman->tanggal_peminjaman }}</td>
                                             <td>{{ $peminjaman->tanggal_pengembalian }}</td>
                                             <td>
                                                 @if ($peminjaman->tanggal_pengembalian != null)
                                                     Buku Telah dikembalikan
                                                 @else
-                                                    -
+                                                    Buku Belum Dikembalikan
                                                 @endif
                                             </td>
                                     </tbody>
@@ -82,7 +82,7 @@
                                     <table class="table">
                                         <tr>
                                             <th style="width:50%">Keterlambatan:</th>
-                                            <td> 7 hari</td>
+                                            <td> {{ $data['hari'] }} hari</td>
                                         </tr>
                                         <tr>
                                             <th>Denda Perhari</th>
@@ -90,7 +90,7 @@
                                         </tr>
                                         <tr>
                                             <th>Total:</th>
-                                            <td>Rp.14.0000</td>
+                                            <td>{{ $data['total'] }}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -101,15 +101,26 @@
 
                         <!-- this row will not appear when printing -->
                         <div class="row no-print">
-                            <div class="col-12">
-                                <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
-                                        class="fas fa-print"></i> Print</a>
-                                <form action="{{ route('pengembalian.store') }}">
-                                    <button type="submit" class="btn btn-success float-right"><i
-                                            class="far fa-credit-card"></i> Kembalikan Buku
-                                    </button>
-                                </form>
 
+                            <div class="col-12">
+
+                                @if ($data['hari'] != 0)
+                                    <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i
+                                            class="fas fa-print"></i> Bayar Denda</a>
+                                @endif
+
+
+                                @if ($peminjaman->tanggal_pengembalian == null)
+                                    <form
+                                        action="{{ route('peminjaman.create_pengembalian', ['peminjaman' => $peminjaman['id']]) }}"
+                                        {{-- <form action="{{ route('pengembalian.create_pengembalian', ['peminjaman' => $peminjaman['id']]) }}" --}} method="POST">
+                                        @csrf
+                                        @method('GET')
+                                        <button type="submit" class="btn btn-success float-right"><i
+                                                class="far fa-credit-card"></i> Kembalikan Buku
+                                        </button>
+                                    </form>
+                                @endif
 
                             </div>
                         </div>

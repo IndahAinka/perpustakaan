@@ -108,6 +108,7 @@ class BukuController extends Controller
             'kategori_id' => '',
             'penerbit_id' => '',
             'rak_id' => '',
+            'stok' => 'required',
             'judul' => 'required',
             'pengarang' => 'required',
         ]);
@@ -115,6 +116,7 @@ class BukuController extends Controller
         $validateData['kategori_id']= $request->input('kategori_id');
         $validateData['penerbit_id']= $request->input('penerbit_id');
         $validateData['rak_id']= $request->input('rak_id');
+        $validateData['stok']= $request->input('stok');
         $validateData['judul']= $request->input('judul');
         $validateData['pengarang']= $request->input('pengarang');
 

@@ -32,7 +32,7 @@ class Peminjaman extends Model
         return $this->belongsTo(Member::class, 'member_id', 'id');
     }
 
-    public function pengembalian():HasOne
+    public function pengembalians():HasOne
     {
         return $this->hasOne(Pengembalian::class);
     }

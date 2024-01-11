@@ -52,7 +52,7 @@ class PenerbitController extends Controller
             'alert-type' => 'success'
         );
 
-        return redirect()->route('penerbit.index');
+        return redirect()->route('penerbit.index')->with($notification);
     }
 
     /**

@@ -28,7 +28,7 @@ class KategoriStoreRequest extends FormRequest
         return [
 
             'kode' => 'required|max:10|min:3|unique:kategoris',
-            'nama' => 'required'
+            'nama' => 'required',
         ];
     }
 

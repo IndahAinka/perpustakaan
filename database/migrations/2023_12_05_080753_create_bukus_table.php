@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('judul');
             $table->integer('stok');
             $table->string('pengarang');
-
             $table->timestamps();
         });
     }

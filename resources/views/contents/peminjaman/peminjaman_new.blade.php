@@ -19,24 +19,63 @@
 
                                     <div class="form-group">
                                         <label>Nama member</label>
-                                        <select class="form-control select2" style="width: 100%;" name="member_id">
+                                        <select
+                                            class="form-control select2 @error('member_id') is-invalid
+                                        @enderror"
+                                            style="width: 100%;" name="member_id">
                                             @foreach ($data['member'] as $item)
                                                 <option selected="selected" value="{{ $item['id'] }}">{{ $item['nama'] }}
                                                 </option>
                                             @endforeach
                                         </select>
+                                        @error('member_id')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Kode Buku</label>
-                                        <select class="form-control select2" style="width: 100%;" name="buku_id">
+                                        <label>Nama Buku</label>
+                                        <select class="form-control js-example-basic-multiple @error('buku_id') is-invalid @enderror"
+                                            style="width: 100%;" id="buku_id" name="buku_id[]">
                                             @foreach ($data['buku'] as $item)
-                                                <option selected="selected" value="{{ $item['id'] }}">{{ $item['id'] }}
-                                                </option>
+                                                <option value="{{ $item['id'] }}">{{ $item['judul'] }}</option>
                                             @endforeach
                                         </select>
-                                        <p>Judul -> {{ $item['judul'] }}</p>
+                                        @error('buku_id')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
+
+
+
+                                    <!-- Date dd/mm/yyyy -->
+                                    <div class="form-group">
+                                        <label>Tanggal Peminjaman</label>
+
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                            </div>
+                                            <input type="text"
+                                                class="form-control @error('tanggal_peminjaman') is-invalid
+                                            @enderror"
+                                                data-inputmask-alias="datetime" name="tanggal_peminjaman"
+                                                data-inputmask-inputformat="dd/mm/yyyy" data-mask>
+                                            @error('tanggal_peminjaman')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+
+                                        <!-- /.input group -->
+                                    </div>
+                                    <!-- /.form group -->
                             </div>
                             <!-- /.card -->
                         </div>
@@ -60,4 +99,10 @@
         <!-- /.card-footer-->
     </div>
     <!-- /.card -->
+
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2();
+        });
+    </script>
 @endsection

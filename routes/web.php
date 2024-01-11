@@ -52,5 +52,9 @@ Route::resource('pengembalian',PengembalianController::class);
 // Route::get('/registered',[RegisterController::class, 'index']);
 Route::get('/registered',[RegisterController::class, 'index']);
 
+// Route::get('pengembalian/{peminjaman}/create_pengembalian', [PengembalianController::class, 'create_pengembalian'])->name('pengembalian.create_pengembalian');
+Route::get('peminjaman/{peminjaman}/create_pengembalian', [PeminjamanController::class, 'create_pengembalian'])->name('peminjaman.create_pengembalian');
+Route::put('peminjaman/{peminjaman}/return', [PeminjamanController::class, 'return'])->name('peminjaman.return');
+
 
 

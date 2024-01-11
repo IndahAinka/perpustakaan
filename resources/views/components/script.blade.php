@@ -1,31 +1,35 @@
-
-
- <!-- jQuery -->
-<script src="{{ asset('assets/plugins/jquery/jquery.min.js')}}"></script>
+<!-- jQuery -->
+<script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap 4 -->
-<script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
 <!-- Select2 -->
-<script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
+
+{{-- <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script> --}}
 <!-- SweetAlert2 -->
 <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 <!-- Toastr -->
 <script src="{{ asset('assets/plugins/toastr/toastr.min.js') }}"></script>
 <!-- DataTables  & Plugins -->
-<script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/jszip/jszip.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/pdfmake/pdfmake.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/pdfmake/vfs_fonts.js')}}"></script>
-<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+<script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset('assets/dist/js/adminlte.min.js')}}"></script>
+<script src="{{ asset('assets/dist/js/adminlte.min.js') }}"></script>
+<!-- InputMask -->
+<script src="{{ asset('assets/plugins/moment/moment.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/inputmask/jquery.inputmask.min.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
 {{-- <script src="{{ asset('assets/dist/js/demo.js') }}"></script> --}}
 
@@ -33,42 +37,43 @@
 
 
 {{-- Script DataTable --}}
- <script>
-     $(function() {
-         $("#example1").DataTable({
-             "responsive": true,
-             "lengthChange": false,
-             "autoWidth": false,
-             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-         $('#example2').DataTable({
-             "paging": true,
-             "lengthChange": false,
-             "searching": false,
-             "ordering": true,
-             "info": true,
-             "autoWidth": false,
-             "responsive": true,
-         });
-     });
- </script>
+<script>
+    $(function() {
+        $("#example1").DataTable({
+            "paging": true,
+            "responsive": true,
+            "lengthChange": true,
+            "autoWidth": false,
+            // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+</script>
 
 
- {{-- Script Activate Sidebar --}}
- <script language='JavaScript'>
-     /** add active class and stay opened when selected */
-     var url = window.location;
+{{-- Script Activate Sidebar --}}
+<script language='JavaScript'>
+    /** add active class and stay opened when selected */
+    var url = window.location;
 
-     // for sidebar menu entirely but not cover treeview
-     $('ul.nav-sidebar a').filter(function() {
-         return this.href == url;
-     }).addClass('active');
+    // for sidebar menu entirely but not cover treeview
+    $('ul.nav-sidebar a').filter(function() {
+        return this.href == url;
+    }).addClass('active');
 
-     // for treeview
-     $('ul.nav-treeview a').filter(function() {
-         return this.href == url;
-     }).parentsUntil(".nav-sidebar > .nav-treeview").addClass('menu-open').prev('a').addClass('active');
- </script>
+    // for treeview
+    $('ul.nav-treeview a').filter(function() {
+        return this.href == url;
+    }).parentsUntil(".nav-sidebar > .nav-treeview").addClass('menu-open').prev('a').addClass('active');
+</script>
 
 <script>
     @if (Session::has('message'))
@@ -107,5 +112,22 @@
                 break;
         }
     @endif
-</script>
 
+
+    //Datemask dd/mm/yyyy
+    $('#datemask').inputmask('dd/mm/yyyy', {
+        'placeholder': 'dd/mm/yyyy'
+    })
+    //Datemask2 mm/dd/yyyy
+    $('#datemask2').inputmask('mm/dd/yyyy', {
+        'placeholder': 'mm/dd/yyyy'
+    })
+    //Money Euro
+    $('[data-mask]').inputmask()
+
+
+    // Scirpt Select
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2();
+    });
+</script>

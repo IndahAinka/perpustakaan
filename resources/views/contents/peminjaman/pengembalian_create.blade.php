@@ -13,10 +13,11 @@
                                 <h3 class="card-title">Pengembalian Buku</h3>
                             </div>
                             <div class="card-body">
-                                <form action="{{ route('pengembalian.store') }}" method="POST" novalidate>
+                                <form action="{{ route('peminjaman.return',$peminjaman->id) }}" method="POST" novalidate>
                                     @csrf
+                                    @method('PUT')
 
-                                    <input type="hidden" name="peminjaman_id" value="{{ $peminjaman->id }}">
+                                    <input type="hidden" name="id" value="{{ $peminjaman->id }}">
                                     {{-- <strong><i class="fas fa-book mr-1"></i> Peminjaman</strong>
 
                                     <p class="text-muted">

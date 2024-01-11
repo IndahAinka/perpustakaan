@@ -49,47 +49,64 @@
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>ID Peminjaman</th>
-                            <th>Nama Member</th>
-                            <th>Nama Buku</th>
-                            <th>Tanggal Peminjaman</th>
-                            <th>Tanggal Pengembalian</th>
-                            <th>Aksi</th>
+                            {{-- <th class="text-center">No</th> --}}
+                            <th >ID Peminjaman</th>
+                            <th >Nama Member</th>
+                            <th >Nama Buku</th>
+                            <th >Tanggal Peminjaman</th>
+                            <th >Tanggal Kembali</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($data['peminjaman'] as $item)
+                        @foreach ($data['peminjaman'] as $index => $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                {{-- <td>{{ $loop->iteration }}</td> --}}
                                 <td>{{ $item->id }}</td>
-                                <td>{{ $item->members->nama}}</td>
+                                <td>{{ $item->members->nama }}</td>
                                 <td>{{ $item->bukus->judul }}</td>
-                                <td>{{ $item->created_at }}</td>
-                                <td>{{ $item->tanggal_pengembalian }}</td>
+                                <td>{{ $item->tanggal_peminjaman }}</td>
+                                <td>{{ $statuses[$index]['tanggal_kembali']->format('Y-m-d') }}</td>
+                                <td>
+                                    @if ($statuses[$index]['status'] == 'Buku Telah dikembalikan')
+                                        <span class="badge badge-success d-sm-flex justify-content-center">
+                                            {{ $statuses[$index]['status'] }}
+                                        </span>
+                                    @elseif ($statuses[$index]['status'] == 'Buku Sedang di Pinjam')
+                                        <span class="badge badge-warning d-sm-flex justify-content-center">
+                                            {{ $statuses[$index]['status'] }}
+                                        </span>
+                                    @elseif ($statuses[$index]['status'] == 'Buku Lewat Batas Peminjaman')
+                                        <span class="badge badge-danger d-sm-flex justify-content-center">
+                                            {{ $statuses[$index]['status'] }}
+                                        </span>
+                                    @endif
+                                </td>
                                 <td class="text-right py-0 align-middle">
                                     <div class="btn-group btn-group-sm">
                                         <form action="{{ route('peminjaman.show', $item['id']) }}" method="POST">
                                             @csrf
                                             @method('GET')
-                                            <button class="btn btn-info"><i class="fas fa-eye"></i></button>
+                                            <button class="btn btn-secondary btn-sm mr-2"><i class="fas fa-folder"></i></button>
                                         </form>
-                                        <form action="{{ route('peminjaman.edit', $item['id']) }}" method="POST">
+
+
+                                        <form action="{{ route('peminjaman.edit', $item['id']) }}" method="GET">
                                             @csrf
-                                            @method('GET')
-                                            <button class="btn btn-info"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-secondary btn-sm mr-2 @if ($statuses[$index]['status'] == 'Buku Telah dikembalikan') disabled @endif">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
                                         </form>
+
                                         <form action="{{ route('peminjaman.destroy', $item['id']) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger deleteBtn"onclick="return confirm('Apakah anda yakin untuk menghapus data ini?')"
+                                            <button type="submit"
+                                                class="btn btn-secondary deleteBtn btn-sm mr-2 @if ($statuses[$index]['status'] == 'Buku Telah dikembalikan') disabled @endif"onclick="return confirm('Apakah anda yakin untuk menghapus data ini?')"
                                                 value="{{ $item->id }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                            {{-- <button type="submit" class="btn btn-danger deleteBtn"
-                                                onclick="return confirm('Apakah anda yakin untuk menghapus data ini?')">
-                                                <i class="fas fa-trash"></i>
-                                            </button> --}}
                                         </form>
 
                                     </div>
@@ -119,16 +136,15 @@
     @endif
 @endsection
 
-@section('script')
+{{-- @section('script')
     <script>
-        < script >
-            $('a.confirm-action').click(function(e) {
-                e.preventDefault();
-                var modal = $('#deleteConfirmModal');
-                modal.data('url', $(this).attr('href'));
-                modal.data('request_type', $(this).data('request-type'));
-                modal.modal('show');
-            });
+        $('a.confirm-action').click(function(e) {
+            e.preventDefault();
+            var modal = $('#deleteConfirmModal');
+            modal.data('url', $(this).attr('href'));
+            modal.data('request_type', $(this).data('request-type'));
+            modal.modal('show');
+        });
 
         $('#deleteConfirm').click(function() {
             var modal = $('#deleteConfirmModal');
@@ -138,4 +154,4 @@
             modal.modal('hide');
         });
     </script>
-@endsection
+@endsection --}}
