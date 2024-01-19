@@ -56,43 +56,38 @@ class PeminjamanController extends Controller
 
     public function indexDt()
     {
+        $status = '';
+        $badge = '';
         $data = Peminjaman::with(['bukus', 'members']);
         return DataTables::of($data)
-        ->addColumn('tanggal_kembali', function($data){
-            $tanggal_kembali = Carbon::parse($data['tanggal_peminjaman'])->addDays(7);
-            return Carbon::parse($tanggal_kembali)->format('Y-m-d');
-            // return $tanggal_kembali;
-        })
-        ->addColumn('status', function ($data) {
-            $status = '';
-            // Ensure that $data['peminjaman'] is an array
-            if (is_array($data['peminjaman'])) {
-                foreach ($data['peminjaman'] as $peminjaman) {
-                    // Ensure that $peminjaman is an object
-                    if (is_object($peminjaman)) {
-                        $tanggal_peminjaman = $peminjaman->tanggal_peminjaman;
-                        $tanggal_pengembalian = $peminjaman->tanggal_pengembalian;
+            ->addColumn('tanggal_kembali', function ($data) {
+                $tanggal_kembali = Carbon::parse($data['tanggal_peminjaman'])->addDays(7);
+                return Carbon::parse($tanggal_kembali)->format('Y-m-d');
+                // return $tanggal_kembali;
+            })
+            ->addColumn('status', function ($data) use (&$status, &$badge) {
+                $peminjaman = $data;
+                $tanggal_peminjaman = $peminjaman->tanggal_peminjaman;
+                $tanggal_pengembalian = $peminjaman->tanggal_pengembalian;
 
-                        if ($tanggal_peminjaman) {
-                            $tanggal_kembali = Carbon::parse($tanggal_peminjaman)->addDays(7);
-                            if ($tanggal_pengembalian != NULL) {
-                                $status = "Buku Telah dikembalikan";
-                            } elseif (now()->gt(Carbon::parse($tanggal_kembali))) {
-                                $status = "Buku Lewat Batas Peminjaman";
-                            } else {
-                                $status = "Buku Sedang di Pinjam";
-                            }
-                        } else {
-                            $status = 'Tidak ada peminjaman buku';
-                        }
-
-
+                if ($tanggal_peminjaman) {
+                    $tanggal_kembali = Carbon::parse($tanggal_peminjaman)->addDays(7);
+                    if ($tanggal_pengembalian != NULL) {
+                        $status = "Buku Telah dikembalikan";
+                        $badge = 'success';
+                    } elseif (now()->gt(Carbon::parse($tanggal_kembali))) {
+                        $status = "Buku Lewat Batas Peminjaman";
+                        $badge = 'danger';
+                    } else {
+                        $status = "Buku Sedang di Pinjam";
+                        $badge = 'warning';
                     }
+                } else {
+                    $status = 'Tidak ada peminjaman buku';
+                    $badge = 'default';
                 }
-            }
-
-            return $status;
-        })
+                return '<span class="badge badge-' . $badge . ' d-flex justify-content-center">' . $status . '</span>';
+            })
             ->addColumn('action', function ($data) {
                 $action = '
                 <div class="btn-group btn-group-sm">

@@ -132,10 +132,7 @@
                     data: 'status',
                     name: 'status',
                     orderable: false,
-                    searchable: false,
-                    render: function(data, type, full) {
-                        return status;
-                    },
+                    searchable: false
                 },
 
                 {
