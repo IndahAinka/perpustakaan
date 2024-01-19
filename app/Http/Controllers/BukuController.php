@@ -10,6 +10,7 @@ use App\Models\Rak;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
+use Yajra\DataTables\DataTables;
 
 class BukuController extends Controller
 {
@@ -50,25 +51,64 @@ class BukuController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(BukuStoreRequest $request):RedirectResponse
+    public function store(BukuStoreRequest $request): RedirectResponse
     {
         // dd('Berhasil');
         $validateData = $request->except('_token');
         $validateData = Buku::inputData($validateData);
 
-        if($validateData){
+        if ($validateData) {
             $notification = array(
                 'message' => 'Data Berhasil Ditambahkan',
                 'alert-type' => 'success'
             );
-        }else{
+        } else {
             $notification = array(
                 'message' => 'Data Berhasil Ditambahkan',
-                'alert-type' => 'error');
+                'alert-type' => 'error'
+            );
         }
 
 
-        return redirect()->route('buku.index')->with($notification  );
+        return redirect()->route('buku.index')->with($notification);
+    }
+
+    public function indexDt()
+    {
+
+        // $data = Buku::query();
+        $data = Buku::with(['kategoris', 'penerbits', 'raks']);
+        return DataTables::of($data)
+            ->addColumn('kategori_str', function($data){
+                return  $data->kategoris->nama;
+            })
+            ->addColumn('penerbit_str', function($data){
+                return  $data->penerbits->nama;
+            })
+            ->addColumn('rak_str', function($data){
+                return  $data->raks->nama;
+            })
+            ->addColumn('action', function ($data) {
+                $action = '
+                <div class="btn-group btn-group-sm">
+                <form action="' . route('buku.edit', $data->id) . '" method="POST">
+                ' . csrf_field() . '
+                ' . method_field('GET') . '
+                <button class="btn btn-secondary btn-sm mr-2"><i class="fas fa-edit"></i></button>
+            </form>
+            <form action="' . route('buku.destroy', $data->id) . '" method="POST">
+                ' . csrf_field() . '
+                ' . method_field('DELETE') . '
+                <button type="submit" class="btn btn-secondary btn-sm mr-2"
+                onclick="return confirm(\'Apakah anda yakin untuk menghapus data ini?\')"><i class="fas fa-trash"></i></button>
+            </form>
+        </div>
+                ';
+
+                return $action;
+            })
+            ->rawColumns(['action'])
+            ->toJson();
     }
 
     /**
@@ -96,7 +136,7 @@ class BukuController extends Controller
         $data['info'] = 'Buku';
         $data['page'] = 'buku-edit';
 
-        return view('contents.buku.buku-edit', compact('data','buku'));
+        return view('contents.buku.buku-edit', compact('data', 'buku'));
     }
 
     /**
@@ -113,25 +153,26 @@ class BukuController extends Controller
             'pengarang' => 'required',
         ]);
 
-        $validateData['kategori_id']= $request->input('kategori_id');
-        $validateData['penerbit_id']= $request->input('penerbit_id');
-        $validateData['rak_id']= $request->input('rak_id');
-        $validateData['stok']= $request->input('stok');
-        $validateData['judul']= $request->input('judul');
-        $validateData['pengarang']= $request->input('pengarang');
+        $validateData['kategori_id'] = $request->input('kategori_id');
+        $validateData['penerbit_id'] = $request->input('penerbit_id');
+        $validateData['rak_id'] = $request->input('rak_id');
+        $validateData['stok'] = $request->input('stok');
+        $validateData['judul'] = $request->input('judul');
+        $validateData['pengarang'] = $request->input('pengarang');
 
 
-        Buku::updateData($id,$validateData);
+        Buku::updateData($id, $validateData);
 
-        if($validateData){
+        if ($validateData) {
             $notification = array(
                 'message' => 'Data Berhasil Diupdate',
                 'alert-type' => 'success'
             );
-        }else{
+        } else {
             $notification = array(
                 'message' => 'Data Gagal di update',
-                'alert-type' => 'error');
+                'alert-type' => 'error'
+            );
         }
 
         return redirect()->route('buku.index')->with($notification);

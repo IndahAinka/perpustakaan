@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\KategoriRequest;
 use App\Http\Requests\KategoriStoreRequest;
 use App\Http\Requests\KategoriUpdateRequest;
 use App\Models\Kategori;
-use App\Models\Penerbit;
-use App\Models\Rak;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class KategoriController extends Controller
 {
@@ -33,6 +31,42 @@ class KategoriController extends Controller
         return view('contents.kategori.kategori-data', compact('data'));
     }
 
+    public function indexDt()
+    {
+        $data = Kategori::query()
+        ->with('bukus')
+        ->withCount('bukus');
+        return DataTables::of($data)
+            ->addColumn('bukus_count', function($data){
+                return $data->bukus_count;
+            })
+            ->addColumn('created_at_format', function ($data) {
+                return Carbon::parse($data->created_at)->format('d M Y');
+            })
+            ->addColumn('action', function ($data) {
+                // return '
+                //     <a href="#" class="btn btn-sm btn-success">Edit</a>
+                //     <a href="#" class="btn btn-sm btn-warning">Delete</a>
+                // ';
+                return '<div class="btn-group btn-group-sm">
+                                <form action="' . route('kategori.edit', $data->id) . '" method="GET">
+                                    ' . csrf_field() . '
+                                    <button class="btn btn-secondary btn-sm mr-2"><i class="fas fa-edit"></i></button>
+                                </form>
+                                <form action="' . route('kategori.destroy', $data->id) . '" method="POST">
+                                    ' . csrf_field() . '
+                                    ' . method_field('DELETE') . '
+                                    <button type="submit" class="btn btn-secondary btn-sm mr-2" onclick="return confirm(\'Apakah anda yakin untuk menghapus data ini?\')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>';
+            })
+            ->rawColumns(['action'])
+            ->toJson();
+
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -47,7 +81,7 @@ class KategoriController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-public function store(KategoriStoreRequest $request): RedirectResponse
+    public function store(KategoriStoreRequest $request): RedirectResponse
     {
 
         // $validateData = $request->validate();
@@ -64,7 +98,6 @@ public function store(KategoriStoreRequest $request): RedirectResponse
         );
 
         return redirect()->route('kategori.index')->with($notification);
-
     }
     // public function store(Request $request)
     // {

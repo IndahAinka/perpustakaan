@@ -49,8 +49,8 @@
     </div>
     <!-- ./wrapper -->
 
-    @yield('script')
     @include('components.script')
+    @yield('script')
 
 
 </body>

@@ -4,24 +4,55 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PenerbitRequest;
 use App\Http\Requests\PenerbitStoreRequest;
+use App\Models\Kategori;
 use App\Models\Member;
 use App\Models\Penerbit;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
+use Yajra\DataTables\Facades\DataTables as FacadesDataTables;
 
 class PenerbitController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    protected $penerbit;
+
+
     public function index()
     {
         $data['info'] = 'Penerbit';
         $data['page'] = 'Penerbit-data';
         $data['penerbit'] = Penerbit::selectData();
-        // $Penerbit = ;
         // return view('contents.penerbit.Penerbit-data',compact('info','page'));
         return view('contents.penerbit.penerbit-data', compact('data'));
+    }
+
+    public function indexDt()
+    {
+
+        $data = Penerbit::query();
+        return DataTables::of($data)
+            ->addColumn('action', function ($data) {
+                return '<div class="btn-group btn-group-sm">
+                                <form action="' . route('penerbit.edit', $data->id) . '" method="GET">
+                                    ' . csrf_field() . '
+                                    <button class="btn btn-secondary btn-sm mr-2"><i class="fas fa-edit"></i></button>
+                                </form>
+                                <form action="' . route('penerbit.destroy', $data->id) . '" method="POST">
+                                    ' . csrf_field() . '
+                                    ' . method_field('DELETE') . '
+                                    <button type="submit" class="btn btn-secondary btn-sm mr-2" onclick="return confirm(\'Apakah anda yakin untuk menghapus data ini?\')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>';
+            })
+            ->rawColumns(['action'])
+            ->toJson();
+
     }
 
     /**
@@ -72,8 +103,6 @@ class PenerbitController extends Controller
         $data['page'] = 'Penerbit-edit';
 
         return view('contents.penerbit.penerbit-edit', compact('data', 'penerbit'));
-
-
     }
 
     /**

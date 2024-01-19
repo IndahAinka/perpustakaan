@@ -10,7 +10,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="myDt" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -20,41 +20,7 @@
                             <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach ($data['rak'] as $item)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->kode }}</td>
-                                <td>{{ $item->nama }}</td>
-                                <td>{{ $item->created_at }}</td>
-                                <td class="text-right py-0 align-middle">
-                                    <div class="btn-group btn-group-sm">
-                                        <form action="{{ route('rak.edit', $item['id']) }}" method="POST">
-                                            @csrf
-                                            @method('GET')
-                                            <button class="btn btn-info"><i class="fas fa-edit"></i></button>
-                                            {{-- <button type="button" class="btn btn-info"><i class="fas fa-edit"></button> --}}
-                                        </form>
-                                        <form action="{{ route('rak.destroy', $item['id']) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            {{-- <a  class="btn btn-danger"><i class="fas fa-trash"></i></a> --}}
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah anda yakin untuk menghapus data ini?')" ><i class="fas fa-trash"></i></button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    {{-- <tfoot>
-            <tr>
-              <th>Rendering engine</th>
-              <th>Browser</th>
-              <th>Platform(s)</th>
-              <th>Engine version</th>
-              <th>CSS grade</th>
-            </tr>
-            </tfoot> --}}
+                    <tbody></tbody>
                 </table>
             </div>
             <!-- /.card-body -->
@@ -76,4 +42,32 @@
             toastr.success('{{ Session('success') }}')
         </script>
     @endif
+@endsection
+
+@section('script')
+    <script>
+
+    var dtTable = $('#myDt').DataTable({
+        processing: true,serverSide: true,pageLength: 10,
+        order: [[2, 'asc']],
+        columnDefs: [
+            { className: 'text-center', targets: ['_all'] },
+        ],
+        ajax: '{{ route("rak.index.dt") }}',
+        columns: [
+            { data: 'id', name: 'id', orderable: true, searchable:false },
+            { data: 'kode', name: 'kode', orderable: true, searchable:true },
+            { data: 'nama', name: 'nama', orderable: true, searchable:true },
+            { data: 'created_at_format', name: 'created_at', orderable: true, searchable:false },
+            { data: 'action', name: 'action', orderable: false, searchable:false },
+
+        ],
+        initComplete: function(settings){
+            // table = settings.oInstance.api();
+            // initSearchCol(table,'#header-filter','search-col-dt');
+        }
+    });
+
+
+    </script>
 @endsection

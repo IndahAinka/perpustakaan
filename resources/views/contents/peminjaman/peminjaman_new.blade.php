@@ -16,16 +16,12 @@
                                 <form action="{{ route('peminjaman.store') }}" method="POST" novalidate>
                                     @csrf
 
-
                                     <div class="form-group">
                                         <label>Nama member</label>
-                                        <select
-                                            class="form-control select2 @error('member_id') is-invalid
-                                        @enderror"
+                                        <select class="form-control select2 @error('member_id') is-invalid @enderror"
                                             style="width: 100%;" name="member_id">
                                             @foreach ($data['member'] as $item)
-                                                <option selected="selected" value="{{ $item['id'] }}">{{ $item['nama'] }}
-                                                </option>
+                                                <option value="{{ $item['id'] }}">{{ $item['nama'] }}</option>
                                             @endforeach
                                         </select>
                                         @error('member_id')
@@ -33,13 +29,12 @@
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
-
                                     </div>
 
                                     <div class="form-group">
                                         <label>Nama Buku</label>
-                                        <select class="form-control js-example-basic-multiple @error('buku_id') is-invalid @enderror"
-                                            style="width: 100%;" id="buku_id" name="buku_id[]">
+                                        <select class="form-control select2 @error('buku_id') is-invalid @enderror"
+                                            style="width: 100%;" id="buku_id" name="buku_id">
                                             @foreach ($data['buku'] as $item)
                                                 <option value="{{ $item['id'] }}">{{ $item['judul'] }}</option>
                                             @endforeach
@@ -51,19 +46,15 @@
                                         @enderror
                                     </div>
 
-
-
                                     <!-- Date dd/mm/yyyy -->
                                     <div class="form-group">
                                         <label>Tanggal Peminjaman</label>
-
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
                                             </div>
                                             <input type="text"
-                                                class="form-control @error('tanggal_peminjaman') is-invalid
-                                            @enderror"
+                                                class="form-control @error('tanggal_peminjaman') is-invalid @enderror"
                                                 data-inputmask-alias="datetime" name="tanggal_peminjaman"
                                                 data-inputmask-inputformat="dd/mm/yyyy" data-mask>
                                             @error('tanggal_peminjaman')
@@ -72,12 +63,9 @@
                                                 </span>
                                             @enderror
                                         </div>
-
-                                        <!-- /.input group -->
                                     </div>
-                                    <!-- /.form group -->
+                                </form>
                             </div>
-                            <!-- /.card -->
                         </div>
                     </div>
                 </div>
@@ -86,7 +74,6 @@
                     <div class="col-12">
                         <a href="#" class="btn btn-secondary">Cancel</a>
                         <input type="submit" value="Simpan" class="btn btn-success float-right">
-                        </form>
                     </div>
                 </div>
             </section>
@@ -102,7 +89,25 @@
 
     <script>
         $(document).ready(function() {
-            $('.js-example-basic-multiple').select2();
+            $('#buku_id').select2({
+                placeholder: 'Pilih Judul Buku',
+                ajax: {
+                    url: "{{ route('buku.index') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    minimumInputLength: 3, // Set the minimum length for input before triggering the search
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.judul
+                                };
+                            })
+                        };
+                    }
+                }
+            });
         });
     </script>
 @endsection

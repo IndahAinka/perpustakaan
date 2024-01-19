@@ -10,7 +10,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="myTable" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -23,46 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($data['member'] as $item)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->username }}</td>
-                                <td>{{ $item->nama }}</td>
-                                <td>{{ $item->alamat }}</td>
-                                <td>{{ $item->hp }}</td>
-                                <td>
-                                    <span class="badge badge-success d-sm-flex justify-content-center">
-                                        {{ $item->status }}
-                                    </span>
-                                </td>
-                                <td class="text-right py-0 align-middle">
-                                    <div class="btn-group btn-group-sm">
-                                        <form action="{{ route('member.show', $item['id']) }}" method="POST">
-                                            @csrf
-                                            @method('GET')
-                                            <button class="btn btn-secondary btn-sm mr-2"><i
-                                                    class="fas fa-folder"></i></button>
-                                        </form>
 
-                                        <form action="{{ route('member.edit', $item['id']) }}" method="POST">
-                                            @csrf
-                                            @method('GET')
-                                            <button class="btn btn-secondary btn-sm mr-2"><i
-                                                    class="fas fa-edit"></i></button>
-                                            {{-- <button type="button" class="btn btn-info"><i class="fas fa-edit"></button> --}}
-                                        </form>
-                                        <form action="{{ route('member.destroy', $item['id']) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            {{-- <a  class="btn btn-danger"><i class="fas fa-trash"></i></a> --}}
-                                            <button type="submit" class="btn btn-secondary btn-sm mr-2"
-                                                onclick="return confirm('Apakah anda yakin untuk menghapus data ini?')"><i
-                                                    class="fas fa-trash"></i></button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
                     </tbody>
 
                 </table>
@@ -72,4 +33,30 @@
 
 
     </section>
+@endsection
+
+@section('script')
+    <script>
+        var dtTable = $('#myTable').DataTable({
+            processing:true, serverSide:true, pageLength:10,
+            order: [[2, 'asc']],
+            columnDefs: [
+                { classname: 'text-center', targets: ['_all'],}
+            ],
+            ajax: '{{ route("member.index.dt") }}',
+            columns: [
+                {data: 'id', name: 'id', order:true, searchable:false},
+                {data: 'username', name: 'username', order:true, searchable:false},
+                {data: 'nama', name: 'nama', order:true, searchable:false},
+                {data: 'alamat', name: 'alamat', order:true, searchable:false},
+                {data: 'hp', name: 'hp', order:true, searchable:false},
+                {data: 'status', name: 'status', order:true, searchable:false},
+                {data: 'action', name: 'action', order:true, searchable:false},
+            ],
+            initComplete: function(settings){
+
+            }
+
+        });
+    </script>
 @endsection

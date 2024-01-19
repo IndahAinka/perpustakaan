@@ -36,7 +36,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link ">
+                <a class="nav-link {{ Request::is('peminjaman*') || Request::is('peminjaman/*/show') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-bookmark"></i>
                     <p>
                         Peminjaman
@@ -44,7 +44,7 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    <li class="nav-item">
+                    <li class="nav-item ">
                         <a class="nav-link" href="{{ route('peminjaman.index') }}">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Peminjaman Data</p>
@@ -61,7 +61,7 @@
 
 
             <li class="nav-item">
-                <a class="nav-link ">
+                <a class="nav-link {{ Request::is('kategori*') ?'active' : '' }}">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
                         Kategori
@@ -85,7 +85,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="#" class="nav-link {{ Request::is('penerbit*') ?'active' : '' }} ">
                     <i class="nav-icon fas fa-newspaper"></i>
                     <p>
                         Penerbit
@@ -108,7 +108,7 @@
 
                 </ul>
             <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="#" class="nav-link {{ Request::is('buku*') ?'active' : '' }} ">
                     <i class="nav-icon fas fa-book"></i>
 
                     <p>
@@ -133,7 +133,7 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="#" class="nav-link {{ Request::is('rak*') ?'active' : '' }} ">
                     <i class="nav-icon fas fa-boxes"></i>
                     <p>
                         Rak
@@ -157,7 +157,7 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link ">
+                <a href="#" class="nav-link {{ Request::is('member*') ?'active' : '' }} ">
                     <i class="nav-icon fas fa-users"></i>
                     <p>
                         Member

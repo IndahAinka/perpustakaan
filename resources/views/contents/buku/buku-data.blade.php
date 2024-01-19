@@ -10,7 +10,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+                <table id="myDt" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($data['buku'] as $item)
+                        {{-- @foreach ($data['buku'] as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->kategoris->nama }}</td>
@@ -33,35 +33,23 @@
                                 <td>{{ $item->judul }}</td>
                                 <td>{{ $item->stok }}</td>
                                 <td>{{ $item->pengarang }}</td>
-                                {{-- <td>{{ $item->created_at }}</td> --}}
                                 <td class="text-right py-0 align-middle">
                                     <div class="btn-group btn-group-sm">
                                         <form action="{{ route('buku.edit', $item['id']) }}" method="POST">
                                             @csrf
                                             @method('GET')
                                             <button class="btn btn-secondary btn-sm mr-2"><i class="fas fa-edit"></i></button>
-                                            {{-- <button type="button" class="btn btn-info"><i class="fas fa-edit"></button> --}}
                                         </form>
                                         <form action="{{ route('buku.destroy', $item['id']) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            {{-- <a  class="btn btn-danger"><i class="fas fa-trash"></i></a> --}}
                                             <button type="submit" class="btn btn-secondary btn-sm mr-2" onclick="return confirm('Apakah anda yakin untuk menghapus data ini?')"><i class="fas fa-trash"></i></button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @endforeach --}}
                     </tbody>
-                    {{-- <tfoot>
-            <tr>
-              <th>Rendering engine</th>
-              <th>Browser</th>
-              <th>Platform(s)</th>
-              <th>Engine version</th>
-              <th>CSS grade</th>
-            </tr>
-            </tfoot> --}}
                 </table>
             </div>
             <!-- /.card-body -->
@@ -94,4 +82,37 @@
             toastr.error('{{ Session('success') }}')
         </script>
     @endif
+@endsection
+
+
+
+@section('script')
+    <script>
+        var dtTable = $('#myDt').DataTable({
+            processing: true,
+            serverSide: true,
+            pageLength: 10,
+            order: [[2, 'asc']
+            ],
+            columnDefs: [{
+                className: 'text-center',
+                targets: ['_all']
+            }, ],
+            ajax: '{{ route("buku.index.dt") }}',
+            columns: [
+            {data: 'id', name:'id', orderable:false, searchable:false},
+            {data: 'kategori_str', name:'kategori_str', orderable:false, searchable:false},
+            {data: 'penerbit_str', name:'penerbit_str', orderable:false, searchable:false},
+            {data: 'rak_str', name:'rak_str', orderable:false, searchable:false},
+            {data: 'judul', name:'judul', orderable:false, searchable:false},
+            {data: 'stok', name:'stok', orderable:false, searchable:false},
+            {data: 'pengarang', name:'pengarang', orderable:false, searchable:false},
+            {data: 'action', name:'action', orderable:false, searchable:false},
+
+            ],
+            initComplete: function(settings) {
+            }
+
+        });
+    </script>
 @endsection

@@ -7,6 +7,7 @@ use App\Http\Requests\MemberStoreRequest;
 use App\Models\Member;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class MemberController extends Controller
 {
@@ -22,6 +23,49 @@ class MemberController extends Controller
         return view('contents.member.member-data', compact('data'));
     }
 
+    public function indexDt()
+    {
+        $data = Member::query();
+        return DataTables::of($data)
+            ->addColumn('status', function($data){
+                $status = '
+                <span class="badge badge-success d-sm-flex justify-content-center">
+                                         '.$data->status.'
+                                    </span>
+                ';
+                return $status;
+            })
+            ->addColumn('action', function ($data) {
+                $action = '
+                <div class="btn-group btn-group-sm">
+            <form action="' . route('member.show', $data->id) . '" method="POST">
+            ' . csrf_field() . '
+            ' . method_field('GET') . '
+            <button class="btn btn-secondary btn-sm mr-2"><i
+                    class="fas fa-folder"></i></button>
+        </form>
+
+        <form action="' . route('member.edit', $data->id) . '" method="POST">
+            ' . csrf_field() . '
+            ' . method_field('GET') . '
+            <button class="btn btn-secondary btn-sm mr-2"><i
+                    class="fas fa-edit"></i></button>
+        </form>
+        <form action="' . route('member.destroy', $data->id) . '" method="POST">
+            ' . csrf_field() . '
+            ' . method_field('DELETE') . '
+            <button type="submit" class="btn btn-secondary btn-sm mr-2"
+                onclick="return confirm(\'Apakah anda yakin untuk menghapus data ini?\')"><i
+                    class="fas fa-trash"></i></button>
+        </form>
+        </div>
+
+            ';
+                return $action;
+            })
+            ->rawColumns(['action','status'])
+            ->toJson();
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -56,7 +100,11 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        //
+        $data['info'] = 'Member';
+        $data['page'] = 'member-detail';
+        // $data['member'] = Member::selectData();
+
+        return view('contents.member.member-detail', compact('data'));
     }
 
     /**
@@ -67,7 +115,7 @@ class MemberController extends Controller
         $data['info'] = 'Member';
         $data['page'] = 'member-edit';
 
-        return view('contents.member.member-edit', compact('data','member'));
+        return view('contents.member.member-edit', compact('data', 'member'));
     }
 
     /**
@@ -80,7 +128,7 @@ class MemberController extends Controller
             'password' => 'required|min:5|max:255',
             'nama' => 'required|min:3|max:255',
             'alamat' => 'required|min:5|max:255',
-            'hp'=> 'required|min:10|max:13',
+            'hp' => 'required|min:10|max:13',
             'email' => 'required|email:dns'
 
         ]);
@@ -92,7 +140,7 @@ class MemberController extends Controller
         $data['hp'] = $request->input('hp');
         $data['email'] = $request->input('email');
 
-        Member::updateData($id,$data);
+        Member::updateData($id, $data);
 
         // session()->flash('success', 'Data Berhasil diupdate');
         $notification = array(

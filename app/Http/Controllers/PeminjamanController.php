@@ -9,6 +9,7 @@ use App\Models\Peminjaman;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class PeminjamanController extends Controller
 {
@@ -49,8 +50,82 @@ class PeminjamanController extends Controller
             ];
         }
 
-        return view('contents.peminjaman.peminjaman_data', compact('data', 'statuses'));
+        return view('contents.peminjaman.peminjaman-data', compact('data', 'statuses'));
     }
+
+
+    public function indexDt()
+    {
+        $data = Peminjaman::with(['bukus', 'members']);
+        return DataTables::of($data)
+        ->addColumn('tanggal_kembali', function($data){
+            $tanggal_kembali = Carbon::parse($data['tanggal_peminjaman'])->addDays(7);
+            return Carbon::parse($tanggal_kembali)->format('Y-m-d');
+            // return $tanggal_kembali;
+        })
+        ->addColumn('status', function ($data) {
+            $status = '';
+            // Ensure that $data['peminjaman'] is an array
+            if (is_array($data['peminjaman'])) {
+                foreach ($data['peminjaman'] as $peminjaman) {
+                    // Ensure that $peminjaman is an object
+                    if (is_object($peminjaman)) {
+                        $tanggal_peminjaman = $peminjaman->tanggal_peminjaman;
+                        $tanggal_pengembalian = $peminjaman->tanggal_pengembalian;
+
+                        if ($tanggal_peminjaman) {
+                            $tanggal_kembali = Carbon::parse($tanggal_peminjaman)->addDays(7);
+                            if ($tanggal_pengembalian != NULL) {
+                                $status = "Buku Telah dikembalikan";
+                            } elseif (now()->gt(Carbon::parse($tanggal_kembali))) {
+                                $status = "Buku Lewat Batas Peminjaman";
+                            } else {
+                                $status = "Buku Sedang di Pinjam";
+                            }
+                        } else {
+                            $status = 'Tidak ada peminjaman buku';
+                        }
+
+
+                    }
+                }
+            }
+
+            return $status;
+        })
+            ->addColumn('action', function ($data) {
+                $action = '
+                <div class="btn-group btn-group-sm">
+                    <form action="' . route('peminjaman.show', $data->id) . '" method="POST">
+                        ' . csrf_field() . '
+                        ' . method_field('GET') . '
+                        <button class="btn btn-secondary btn-sm mr-2"><i class="fas fa-folder"></i></button>
+                    </form>
+
+                    <form action="' . route('peminjaman.edit', $data->id) . '" method="GET">
+                        ' . csrf_field() . '
+                        <button class="btn btn-secondary btn-sm mr-2 ' . ($data->status == 'Buku Telah dikembalikan' ? 'disabled' : '') . '">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </form>
+
+                    <form action="' . route('peminjaman.destroy', $data->id) . '" method="POST">
+                        ' . csrf_field() . '
+                        ' . method_field('DELETE') . '
+                        <button type="submit"
+                            class="btn btn-secondary deleteBtn btn-sm mr-2 ' . ($data->status == 'Buku Telah dikembalikan' ? 'disabled' : '') . '"
+                            onclick="return confirm(\'Apakah anda yakin untuk menghapus data ini?\')"
+                            value="{{ $item->id }}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>';
+                return $action;
+            })
+            ->rawColumns(['action', 'status'])
+            ->toJson();
+    }
+
 
 
     /**
@@ -72,7 +147,7 @@ class PeminjamanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PeminjamanStoreRequest $request):RedirectResponse
+    public function store(PeminjamanStoreRequest $request): RedirectResponse
     {
         $validateData = $request->except('_token');
 
@@ -127,15 +202,11 @@ class PeminjamanController extends Controller
         $data['info'] = 'Peminjaman';
         $data['page'] = 'Pengembalian-create';
 
-        if($peminjaman->tanggal_pengembalian != NULL)
-        {
+        if ($peminjaman->tanggal_pengembalian != NULL) {
             return view('contents.peminjaman.pengembalian_create', compact('data', 'peminjaman'));
-        }else
-        {
+        } else {
             abort(404, 'Halaman tidak ditemukan');
         }
-
-
     }
 
     public function return(Peminjaman $peminjaman)
@@ -198,6 +269,27 @@ class PeminjamanController extends Controller
         );
 
         return redirect()->route('peminjaman.index')->with($notification);
+    }
+
+
+
+    /**
+     * Select2 searchSelect buku_id
+     */
+    public function buku()
+    {
+        $data = Buku::where('judul', 'LIKE', '%' . request('q') . '%')->paginate(10);
+
+        return response()->json($data);
+    }
+    /**
+     * Select2 searchSelect buku_id
+     */
+    public function member()
+    {
+        $data = Member::where('nama', 'LIKE', '%' . request('q') . '%')->paginate(10);
+
+        return response()->json($data);
     }
 
     /**

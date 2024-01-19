@@ -20,24 +20,28 @@
                                     <input type="hidden" name="id" value="{{ $kategori['id'] }}">
                                     <div class="form-group">
                                         <label>Kode Kategori</label>
-                                        <input type="text" name="kode" class="form-control @error('kode') is-invalid
-                                        @enderror" value="{{ $kategori['kode'] }}" required autofocus>
+                                        <input type="text" name="kode"
+                                            class="form-control @error('kode') is-invalid
+                                        @enderror"
+                                            value="{{ $kategori['kode'] }}" required autofocus>
                                         @error('kode')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
 
                                     </div>
                                     <div class="form-group">
                                         <label>Nama Kategori</label>
-                                        <input type="text" name="nama" class="form-control @error('nama') is-invalid
-                                        @enderror" value="{{ $kategori['nama'] }}" required>
+                                        <input type="text" name="nama"
+                                            class="form-control @error('nama') is-invalid
+                                        @enderror"
+                                            value="{{ $kategori['nama'] }}" required>
                                         @error('nama')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
                                     </div>
 
                                     <!-- /.card-body -->
@@ -66,4 +70,25 @@
 
 
     <!-- /.card -->
+@endsection
+
+@section('script')
+    <script>
+        var dtTable = $('#myTable').DataTable({
+            processing:true, serverSide:true, pageLength:10,
+            order: [[2, 'asc']],
+            columnDefs: [
+                { className: 'text-center', targets: ['_all']},
+            ],
+            ajax: '{{ route("kategori.index.dt") }}',
+            columns:[
+                {data: 'id', name: 'id', orderable:true, searchable:false},
+                {data: 'kode', name: 'kode', orderable:true, searchable:false},
+                {data: 'nama', name: 'nama', orderable:true, searchable:false},
+                {data: 'action', name: 'action', orderable:true, searchable:false},
+            ],
+            initComplete: function(settings)
+            {}
+        });
+    </script>
 @endsection
