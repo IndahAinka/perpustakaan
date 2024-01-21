@@ -20,7 +20,7 @@
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <th><input type="text" class="form-control" placeholder="Filter ID"></th>
                             <th><input type="text" class="form-control" placeholder="Filter Username"></th>
                             <th><input type="text" class="form-control" placeholder="Filter Nama"></th>
@@ -28,11 +28,22 @@
                             <th><input type="text" class="form-control" placeholder="Filter No Hp"></th>
                             <th><input type="text" class="form-control" placeholder="Filter Status"></th>
                             <th></th> <!-- Placeholder for action column filter -->
-                        </tr>
+                        </tr> --}}
                     </thead>
                     <tbody>
 
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username Member</th>
+                            <th>Nama Member</th>
+                            <th>Alamat Member</th>
+                            <th>No Hp Member</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </tfoot>
 
                 </table>
             </div>
@@ -64,7 +75,7 @@
                 processing: true,
                 serverSide: true,
                 pageLength: 10,
-                responsive:true,
+                responsive: true,
                 order: [
                     [2, 'asc']
                 ],
@@ -117,22 +128,36 @@
                     },
                 ],
                 initComplete: function() {
-                    var table = this;
-                    this.api().columns().every(function() {
-                        var column = this;
-                        var title = $(column.header()).text();
+                    this.api()
+                        .columns()
+                        .every(function() {
+                            let column = this;
+                            let title = column.footer().textContent;
 
-                        // Create input element
-                        var input = document.createElement('input');
-                        $(input).appendTo($(column.header()).empty())
-                            .on('keyup change', function() {
+                            // Create input element
+                            let input = document.createElement('input');
+                            input.placeholder = title;
+                            column.footer().replaceChildren(input);
+
+                            // Event listener for user input
+                            input.addEventListener('keyup', () => {
                                 if (column.search() !== this.value) {
-                                    column.search(this.value).draw();
+                                    column.search(input.value).draw();
                                 }
                             });
-                    });
+                        });
                 }
             });
         });
     </script>
+@endsection
+
+@section('style')
+    <style>
+        tfoot input {
+            width: 100%;
+            padding: 3px;
+            box-sizing: border-box;
+        }
+    </style>
 @endsection
