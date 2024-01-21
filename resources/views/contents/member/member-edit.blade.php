@@ -56,6 +56,16 @@
                                         <input type="email" name="email" class="form-control"
                                             value="{{ $member['email'] }}">
                                     </div>
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select class="form-control select2 "
+                                            style="width: 100%;" id="status" name="status">
+
+                                                <option value="{{ $member['status'] }}">active</option>
+                                                <option value="{{ $member['status'] }}">non-active</option>
+                                        </select>
+
+                                    </div>
 
                                     <!-- /.card-body -->
                             </div>

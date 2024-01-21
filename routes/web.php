@@ -61,14 +61,13 @@ Route::resource('/login',LoginController::class);
 
 Route::get('peminjaman/dt',[PeminjamanController::class, 'indexDt'])->name('peminjaman.index.dt');
 Route::resource('peminjaman',PeminjamanController::class);
+Route::get('peminjaman/{peminjaman}/edit', [PeminjamanController::class, 'edit'])->name('peminjaman.edit');
 Route::get('peminjaman/{peminjaman}/show', [PeminjamanController::class, 'show'])->name('peminjaman.show');
 
 
 /*
 |Route select2 in Peminjaman_new view
 */
-Route::get('peminjaman/buku',[PeminjamanController::class, 'buku'])->name('buku.select');
-Route::get('peminjaman/member',[PeminjamanController::class, 'member'])->name('member.select');
 
 
 
@@ -78,9 +77,6 @@ Route::get('/registered',[RegisterController::class, 'index']);
 
 
 
-// Route::get('pengembalian/{peminjaman}/create_pengembalian', [PengembalianController::class, 'create_pengembalian'])->name('pengembalian.create_pengembalian');
-Route::get('peminjaman/{peminjaman}/create_pengembalian', [PeminjamanController::class, 'create_pengembalian'])->name('peminjaman.create_pengembalian');
-Route::put('peminjaman/{peminjaman}/return', [PeminjamanController::class, 'return'])->name('peminjaman.return');
 
 
 

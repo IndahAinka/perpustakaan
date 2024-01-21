@@ -25,15 +25,28 @@ class MemberController extends Controller
 
     public function indexDt()
     {
+        $badge = '';
         $data = Member::query();
         return DataTables::of($data)
-            ->addColumn('status', function($data){
-                $status = '
-                <span class="badge badge-success d-sm-flex justify-content-center">
-                                         '.$data->status.'
+            ->addColumn('status', function ($data) use (&$badge) {
+
+                switch ($data->status) {
+                    case ('active'):
+                        $badge = 'success';
+                        break;
+                    case ('non-active'):
+                        $badge = 'danger';
+                        break;
+                    default:
+                        '';
+                }
+
+                return
+                    '
+                <span class="badge badge-' . $badge . ' d-sm-flex justify-content-center">
+                                         ' . $data->status . '
                                     </span>
                 ';
-                return $status;
             })
             ->addColumn('action', function ($data) {
                 $action = '
@@ -63,7 +76,7 @@ class MemberController extends Controller
             ';
                 return $action;
             })
-            ->rawColumns(['action','status'])
+            ->rawColumns(['action', 'status'])
             ->toJson();
     }
     /**
@@ -123,15 +136,17 @@ class MemberController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validateData = $request->validate([
-            'username' => 'required|max:255|min:5',
-            'password' => 'required|min:5|max:255',
-            'nama' => 'required|min:3|max:255',
-            'alamat' => 'required|min:5|max:255',
-            'hp' => 'required|min:10|max:13',
-            'email' => 'required|email:dns'
+        // $validateData = $request->validate([
+        //     'username' => 'required|max:255|min:5',
+        //     'password' => 'required|min:5|max:255',
+        //     'nama' => 'required|min:3|max:255',
+        //     'alamat' => 'required|min:5|max:255',
+        //     'hp' => 'required|min:10|max:13',
+        //     'email' => 'required|email:dns',
+        //     // 'status' => 'required|'
 
-        ]);
+        // ]);
+        // dd($request);
 
         $data['username'] = $request->input('username');
         $data['password'] = $request->input('password');
@@ -139,6 +154,7 @@ class MemberController extends Controller
         $data['alamat'] = $request->input('alamat');
         $data['hp'] = $request->input('hp');
         $data['email'] = $request->input('email');
+        $data['status'] = $request->input('status');
 
         Member::updateData($id, $data);
 

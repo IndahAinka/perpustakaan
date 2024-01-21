@@ -88,7 +88,7 @@ class BukuController extends Controller
             ->addColumn('rak_str', function($data){
                 return  $data->raks->nama;
             })
-            ->addColumn('action', function ($data) {
+            ->addColumn('action', function($data) {
                 $action = '
                 <div class="btn-group btn-group-sm">
                 <form action="' . route('buku.edit', $data->id) . '" method="POST">

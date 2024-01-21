@@ -89,33 +89,22 @@ class PeminjamanController extends Controller
                 return '<span class="badge badge-' . $badge . ' d-flex justify-content-center">' . $status . '</span>';
             })
             ->addColumn('action', function ($data) {
-                $action = '
-                <div class="btn-group btn-group-sm">
-                    <form action="' . route('peminjaman.show', $data->id) . '" method="POST">
-                        ' . csrf_field() . '
-                        ' . method_field('GET') . '
-                        <button class="btn btn-secondary btn-sm mr-2"><i class="fas fa-folder"></i></button>
-                    </form>
+                return '<div class="btn-group btn-group-sm">
+                                <form action="' . route('peminjaman.edit', $data->id) . '" method="POST">
+                                    ' . csrf_field() . '
+                                    ' . method_field('GET') . '
+                                    <button class="btn btn-secondary btn-sm mr-2"><i class="fas fa-edit"></i></button>
+                                </form>
+                                <form action="' . route('peminjaman.destroy', $data->id) . '" method="POST">
+                                    ' . csrf_field() . '
+                                    ' . method_field('DELETE') . '
+                                    <button type="submit" class="btn btn-secondary btn-sm mr-2" onclick="return confirm(\'Apakah anda yakin untuk menghapus data ini?\')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>';
 
-                    <form action="' . route('peminjaman.edit', $data->id) . '" method="GET">
-                        ' . csrf_field() . '
-                        <button class="btn btn-secondary btn-sm mr-2 ' . ($data->status == 'Buku Telah dikembalikan' ? 'disabled' : '') . '">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </form>
 
-                    <form action="' . route('peminjaman.destroy', $data->id) . '" method="POST">
-                        ' . csrf_field() . '
-                        ' . method_field('DELETE') . '
-                        <button type="submit"
-                            class="btn btn-secondary deleteBtn btn-sm mr-2 ' . ($data->status == 'Buku Telah dikembalikan' ? 'disabled' : '') . '"
-                            onclick="return confirm(\'Apakah anda yakin untuk menghapus data ini?\')"
-                            value="{{ $item->id }}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </form>
-                </div>';
-                return $action;
             })
             ->rawColumns(['action', 'status'])
             ->toJson();
@@ -191,18 +180,6 @@ class PeminjamanController extends Controller
         return view('contents.peminjaman.peminjaman_detail', compact('data', 'peminjaman'));
     }
 
-    public function create_pengembalian(Peminjaman $peminjaman)
-    {
-
-        $data['info'] = 'Peminjaman';
-        $data['page'] = 'Pengembalian-create';
-
-        if ($peminjaman->tanggal_pengembalian != NULL) {
-            return view('contents.peminjaman.pengembalian_create', compact('data', 'peminjaman'));
-        } else {
-            abort(404, 'Halaman tidak ditemukan');
-        }
-    }
 
     public function return(Peminjaman $peminjaman)
     {
@@ -240,12 +217,10 @@ class PeminjamanController extends Controller
         $buku = new Buku();
         $data['buku'] = $buku->selectData()->toArray();
 
-
         $data['info'] = 'Peminjaman';
         $data['page'] = 'Peminjaman-edit';
         return view('contents.peminjaman.peminjaman_edit', compact('data', 'peminjaman'));
     }
-
     /**
      * Update the specified resource in storage.
      */
@@ -277,6 +252,8 @@ class PeminjamanController extends Controller
 
         return response()->json($data);
     }
+
+
     /**
      * Select2 searchSelect buku_id
      */

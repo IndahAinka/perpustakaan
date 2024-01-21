@@ -46,7 +46,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-                <table id="myTable" class="table table-bordered table-striped">
+                <table id="myDt" class="table table-bordered table-striped">
                     <thead>
                         <tr>
                             {{-- <th class="text-center">No</th> --}}
@@ -86,62 +86,27 @@
 
 @section('script')
     <script>
-        let myDt = $('#myTable').dataTable({
-            processing: true,
-            serverSide: true,
-            pageLength: 10,
-            order: [
-                [2, 'asc']
-            ],
-            columnDefs: [{
-                className: 'text-center',
-                target: ['_all']
-            }],
-            ajax: '{{ route('peminjaman.index.dt') }}',
-            columns: [{
-                    data: 'id',
-                    name: 'id',
-                    orderable: true,
-                    searchable: false
-                },
-                {
-                    data: 'members.nama',
-                    name: 'member.nama',
-                    orderable: true,
-                    searchable: false
-                },
-                {
-                    data: 'bukus.judul',
-                    name: 'bukus.judul',
-                    orderable: true,
-                    searchable: false
-                },
-                {
-                    data: 'tanggal_peminjaman',
-                    name: 'tanggal_peminjaman',
-                    orderable: true,
-                    searchable: false
-                },
-                {
-                    data: 'tanggal_kembali',
-                    name: 'tanggal_kembali',
-                    orderable: false,
-                    searchable: false,
-                },
-                {
-                    data: 'status',
-                    name: 'status',
-                    orderable: false,
-                    searchable: false
-                },
+        var dtTable = $('#myDt').DataTable({
+        processing: true,serverSide: true,pageLength: 10,
+        order: [[2, 'asc']],
+        columnDefs: [
+            { className: 'text-center', targets: ['_all'] },
+        ],
+        ajax: '{{ route("peminjaman.index.dt") }}',
+        columns: [
+            { data: 'id', name: 'id', orderable: true, searchable:false },
+            { data: 'members.nama', name: 'members.nama', orderable: true, searchable:true },
+            { data: 'bukus.judul', name: 'bukus.judul', orderable: true, searchable:true },
+            { data: 'tanggal_peminjaman', name: 'tanggal_peminjaman', orderable: true, searchable:true },
+            { data: 'tanggal_kembali', name: 'tanggal_kembali', orderable: true, searchable:true },
+            { data: 'status', name: 'status', orderable: true, searchable:true },
+            { data: 'action', name: 'action', orderable: false, searchable:false },
 
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: true,
-                    searchable: false
-                },
-            ]
-        })
+        ],
+         initComplete: function(settings){
+            // table = settings.oInstance.api();
+            // initSearchCol(table,'#header-filter','search-col-dt');
+        }
+    });
     </script>
 @endsection

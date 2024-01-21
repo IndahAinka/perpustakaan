@@ -43,14 +43,16 @@ class KategoriController extends Controller
             ->addColumn('created_at_format', function ($data) {
                 return Carbon::parse($data->created_at)->format('d M Y');
             })
-            ->addColumn('action', function ($data) {
+            ->addColumn('action', function($data) {
                 // return '
                 //     <a href="#" class="btn btn-sm btn-success">Edit</a>
                 //     <a href="#" class="btn btn-sm btn-warning">Delete</a>
                 // ';
                 return '<div class="btn-group btn-group-sm">
-                                <form action="' . route('kategori.edit', $data->id) . '" method="GET">
+                                <form action="' . route('kategori.edit', $data->id) . '" method="POST">
                                     ' . csrf_field() . '
+                                    ' . method_field('GET') . '
+
                                     <button class="btn btn-secondary btn-sm mr-2"><i class="fas fa-edit"></i></button>
                                 </form>
                                 <form action="' . route('kategori.destroy', $data->id) . '" method="POST">

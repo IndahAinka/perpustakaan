@@ -70,8 +70,9 @@ class RakController extends Controller
                 //     <a href="#" class="btn btn-sm btn-warning">Delete</a>
                 // ';
                 return '<div class="btn-group btn-group-sm">
-                                <form action="' . route('rak.edit', $data->id) . '" method="GET">
+                                <form action="' . route('rak.edit', $data->id) . '" method="POST">
                                     ' . csrf_field() . '
+                                    ' . method_field('GET') . '
                                     <button class="btn btn-secondary btn-sm mr-2"><i class="fas fa-edit"></i></button>
                                 </form>
                                 <form action="' . route('rak.destroy', $data->id) . '" method="POST">
